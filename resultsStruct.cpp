@@ -11,11 +11,8 @@ void resultsStruct::parseStruct(std::string &body, quill::Logger *pLogger) {
     xml_parse_result res=doc.load_string(body.c_str());
 
     pugi::xml_node root = doc.child("full-text-retrieval-response");
-    //LOG_INFO(pLogger, "Parsing data!");
     for (int i = 0; i < fields.size(); ++i) {
         fields[i]=functions[i](root);
-        //if(i!=6)
-        //LOG_INFO(pLogger, "field id{}, value {}!",i,fields[i]);
     }
     for (auto & field : fields) {
         if(field.empty()||field=="{}")
@@ -27,9 +24,6 @@ void resultsStruct::parseStruct(std::string &body, quill::Logger *pLogger) {
     {
         try {
             long long lonint = std::stoi(fields[idx]);
-            //fields[idx]=std::to_string(lonint);
-            //if (lonint > 2147483647)
-               // throw std::invalid_argument("too big "+std::to_string(number));
 
         }
         catch (...)

@@ -14,7 +14,7 @@
 #include <quill/Logger.h>
 #include <quill/detail/LogMacros.h>
 using namespace pugi;
-constexpr std::array<int,3>longints={3,4,10/*,11,12*/};//check for parse ll
+constexpr std::array<int,3>longints={3,4,10};
 constexpr const char* default_update="UPDATE articles SET ";
 
 
@@ -38,9 +38,7 @@ const std::map<std::string,int>fname_to_index={
 };
 
 
-//std::function<std::string(xml_document,std::string)>arr
 
-  //      [](xml_document&doc){return "strung";}};
 class resultsStruct {
 public:
     std::string getIssn();
@@ -51,26 +49,10 @@ private:
 
 
 
-    /*std::map<std::string,int>fname_to_id={
-
-    };*/
 
     std::array<std::string,13> fields;
 
 
-   /* std::string url;
-    std::string title;
-    std::string issn;
-    std::string starting_page;
-    std::string ending_page;
-    std::string publication_date;
-    std::string description;*/
-    //std::vector<std::string> authors;
-    //std::vector<std::string> subjects;
-    //long long int scopus_id;
-    //long long int volume;
-    //long long int issue_identifier;
-    //long long int number;
 
     pqxx::connection didcatedConnection=pqxx::connection(
             "dbname=sciencedirect user=scuser password=rar4Muga \
@@ -94,7 +76,7 @@ private:
                 }
                 if (!creators.empty() && creators.back() == ',')
                 {
-                    creators.pop_back(); // Remove trailing comma
+                    creators.pop_back();
                 }
                 creators += "}";
                 txn.abort();
@@ -122,14 +104,6 @@ private:
                     subjectText = start_pos <= end_pos ? std::string(start_it, end_it.base()) : "";
 
 
-                    //strip(subjectText);
-
-                    /*// Find the position of the newline character and truncate the string
-                    size_t newlinePos = subjectText.find('\n');
-                    if (newlinePos != std::string::npos)
-                    {
-                        subjectText = subjectText.substr(0, newlinePos);
-                    }*/
                     auto txn=pqxx::work(didcatedConnection);
 
                     subjects += txn.quote(pqxx::to_string(subjectText))+",";
@@ -137,7 +111,7 @@ private:
                 }
                 if (!subjects.empty() && subjects.back() == ',')
                 {
-                    subjects.pop_back(); // Remove trailing comma
+                    subjects.pop_back();
                 }
                 subjects += "}";
                 return subjects;
@@ -147,9 +121,6 @@ private:
             [](pugi::xml_node&root){return root.child("coredata").child("prism:issueIdentifier").text().get();},
             [](pugi::xml_node&root){return root.child("coredata").child("prism:number").text().get();}
     };
-
-   // static auto const constexpr func=[](xml_document&doc,std::string&query){return "strung";};
-//std::vector<std::function<std::string(xml_document&)>> arr={
 };
 
 
